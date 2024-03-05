@@ -1,0 +1,125 @@
+body *{
+    font-family: 'Montserrat', sans-serif;
+}
+
+.demobist-container{
+    background-image: linear-gradient(90deg, #120625, #5318ae);
+    padding: 4% 8%;
+    max-width: 100%;
+}
+
+.demobist-logo{
+    width: 300px;
+}
+
+.demobist-banner img{
+    margin-left: 20%;
+    height: 600px;
+}
+.borsa-istanbul-logo{
+    width: 180px;
+    height: 70px;
+}
+.demo-bist-bg{
+    background:linear-gradient(#1c2529,#111);
+}
+
+.demobist-icon{
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 120px;
+    height: 120px;
+    padding: 25px !important;
+    border: 8px solid #1c2529;
+    border-radius: 100px;
+    background-color: #ffffff;
+    margin-top: -60px !important;
+}
+.demobist-icon img{
+    width: 80px;
+    height: 80px;
+}
+
+
+
+
+
+
+
+@media only screen and (max-width: 600px) {
+    .demobist-container{
+        display: block !important;
+    }
+
+    .demobist-container div {
+        width: 100%;
+    }
+   
+    .demobist-logo{
+        width: 300px;
+    }
+
+    .demobist-logo{
+        width: 120px;
+    }
+.borsa-istanbul-logo{
+    margin-right: 0px ;
+    margin-top: 10px ;
+    width: 150px !important;
+    height: 58px !important;
+}
+
+.demobist-inceleme {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+.demobist-inceleme a{
+ padding: 5px !important;
+     font-weight: 500;
+}
+.demobist-banner {
+    display: flex;
+    justify-content: center;
+}
+.demobist-banner img{
+margin-left: 0;
+margin-top: 30px;
+height: 300px;
+}
+
+.demobist-kullanici-sayisi{
+    padding: 30px;
+}
+.demobist-kullanici-sayisi span{
+    font-size: 36px;
+    font-weight: 600;
+}
+
+.demobist-neden, .demobist-neden div{
+    flex-direction: column;
+    width: 100% ;
+}
+
+.demobist-icon{
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width:60px !important;
+    height: 60px;
+    padding: 10px !important;
+    border: 4px solid #1c2529;
+    border-radius: 100px;
+    background-color: #ffffff;
+    margin-top: -30px !important;
+}
+.demobist-icon img{
+    width: 40px;
+    height: 40px;
+}
+
+
+}
