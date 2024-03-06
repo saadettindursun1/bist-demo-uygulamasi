@@ -1,0 +1,161 @@
+<style>
+    @import url("https://fonts.googleapis.com/css?family=Hind:300,400&display=swap");
+
+
+.accordion .accordion-item {
+  border-bottom: 1px solid #e5e5e5;
+}
+.accordion .accordion-item button[aria-expanded=true] {
+  border-bottom: 1px solid #03b5d2;
+}
+.accordion button {
+  position: relative;
+  display: block;
+  text-align: left;
+  width: 100%;
+  padding: 1em 0;
+  color: #7288a2;
+  font-size: 1.15rem;
+  font-weight: 400;
+  border: none;
+  background: none;
+  outline: none;
+}
+.accordion button:hover, .accordion button:focus {
+  cursor: pointer;
+  color: #03b5d2;
+}
+.accordion button:hover::after, .accordion button:focus::after {
+  cursor: pointer;
+  color: #03b5d2;
+  border: 1px solid #03b5d2;
+}
+.accordion button .accordion-title {
+  padding: 1em 1.5em 1em 0;
+}
+.accordion button .icon {
+  display: inline-block;
+  position: absolute;
+  top: 18px;
+  right: 0;
+  width: 22px;
+  height: 22px;
+  border: 1px solid;
+  border-radius: 22px;
+}
+.accordion button .icon::before {
+  display: block;
+  position: absolute;
+  content: "";
+  top: 9px;
+  left: 5px;
+  width: 10px;
+  height: 2px;
+  background: currentColor;
+}
+.accordion button .icon::after {
+  display: block;
+  position: absolute;
+  content: "";
+  top: 5px;
+  left: 9px;
+  width: 2px;
+  height: 10px;
+  background: currentColor;
+}
+.accordion button[aria-expanded=true] {
+  color: #03b5d2;
+}
+.accordion button[aria-expanded=true] .icon::after {
+  width: 0;
+}
+.accordion button[aria-expanded=true] + .accordion-content {
+  opacity: 1;
+  max-height: 9em;
+  transition: all 200ms linear;
+  will-change: opacity, max-height;
+}
+.accordion .accordion-content {
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: opacity 200ms linear, max-height 200ms linear;
+  will-change: opacity, max-height;
+}
+.accordion .accordion-content p {
+  font-size: 1rem;
+  font-weight: 300;
+  margin: 2em 0;
+}
+</style>
+<div class="container">
+  <div class="accordion">
+    <div class="accordion-item">
+      <button id="accordion-button-1" aria-expanded="false"><span class="accordion-title">Demobist'e nasıl kayıt olabilirim?</span><span class="icon" aria-hidden="true"></span></button>
+      <div class="accordion-content">
+        <p>Demobist'e kayıt olmak oldukça basittir. Ana sayfada bulunan "Kayıt Ol" butonuna tıklayarak kayıt formunu doldurmanız yeterlidir. Formu doldurduktan sonra hesabınızı etkinleştirmek için e-posta adresinize gönderilen bağlantıya tıklamanız gerekmektedir.</p>
+      </div>
+    </div>
+    <div class="accordion-item">
+      <button id="accordion-button-2" aria-expanded="false"><span class="accordion-title">Sanal para nedir ve ne işe yarar?</span><span class="icon" aria-hidden="true"></span></button>
+      <div class="accordion-content">
+        <p>Demobist'te kullanılan sanal para, gerçek para değil, platform içindeki birimdir. Sanal para, kullanıcıların gerçek para yatırmadan ve risk almadan borsa deneyimi yaşamalarını sağlar. Bu para ile Borsa İstanbul hisseleri alıp satabilir ve yatırım stratejilerinizi geliştirebilirsiniz.</p>
+      </div>
+    </div>
+    <div class="accordion-item">
+      <button id="accordion-button-3" aria-expanded="false"><span class="accordion-title">Gerçek zamanlı Borsa İstanbul verileri nereden alınıyor?</span><span class="icon" aria-hidden="true"></span></button>
+      <div class="accordion-content">
+        <p>Demobist, gerçek zamanlı Borsa İstanbul verilerini güvenilir kaynaklardan temin eder. Bu veriler, platform üzerindeki hisse senedi fiyatlarının güncel ve doğru olmasını sağlar.</p>
+      </div>
+    </div>
+    <div class="accordion-item">
+      <button id="accordion-button-4" aria-expanded="false"><span class="accordion-title">Demobist'te hisse senedi alım satımı nasıl yapılır?</span><span class="icon" aria-hidden="true"></span></button>
+      <div class="accordion-content">
+        <p>Hisse senedi alım satımı yapmak için öncelikle hesabınıza giriş yapmanız gerekmektedir. Ardından, sanal para ile almak istediğiniz hisse senedini seçip alım emri verebilir veya elinizdeki hisse senetlerini satmak için satış emri verebilirsiniz.</p>
+      </div>
+    </div>
+    <div class="accordion-item">
+      <button id="accordion-button-5" aria-expanded="false"><span class="accordion-title">Demobist'te gerçek para kullanılıyor mu?</span><span class="icon" aria-hidden="true"></span></button>
+      <div class="accordion-content">
+        <p>Hayır, Demobist'te gerçek para kullanılmaz. Tüm işlemler sanal para üzerinden gerçekleştirilir. Bu sayede kullanıcılar gerçek piyasa koşullarında risk almadan pratik yapabilirler.</p>
+      </div>
+    </div>
+    <div class="accordion-item">
+      <button id="accordion-button-6" aria-expanded="false"><span class="accordion-title">Demobist'te hangi hisse senetlerine yatırım yapabilirim?</span><span class="icon" aria-hidden="true"></span></button>
+      <div class="accordion-content">
+        <p>Demobist platformunda Borsa İstanbul'da işlem gören birçok hisse senedine yatırım yapabilirsiniz. Platform üzerinde popüler hisse senetlerinin yanı sıra birçok farklı sektörden şirketin hisse senetleri bulunmaktadır.</p>
+      </div>
+    </div>
+    <div class="accordion-item">
+      <button id="accordion-button-7" aria-expanded="false"><span class="accordion-title">Demobist hesabımı nasıl güvenli hale getirebilirim?</span><span class="icon" aria-hidden="true"></span></button>
+      <div class="accordion-content">
+        <p>Demobist hesabınızı güvende tutmak için güçlü bir şifre kullanmanız önemlidir. Ayrıca, hesabınıza giriş yaparken her zaman güvenli bir internet bağlantısı kullanmalı ve hesabınıza erişimi sınırlı tutmak için gerekli önlemleri almalısınız.</p>
+      </div>
+    </div>
+    <div class="accordion-item">
+      <button id="accordion-button-8" aria-expanded="false"><span class="accordion-title">Demobist'te yatırım yaparken dikkat etmem gereken önemli noktalar nelerdir?</span><span class="icon" aria-hidden="true"></span></button>
+      <div class="accordion-content">
+        <p>Yatırım yaparken, risk yönetimi, piyasa analizi ve strateji oluşturma gibi temel kavramları anlamak önemlidir. Ayrıca, duygusal kararlar vermekten kaçınıp objektif bir şekilde piyasayı takip etmek ve portföyünüzü çeşitlendirmek de önemlidir.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+  <script>
+    const items = document.querySelectorAll(".accordion button");
+
+function toggleAccordion() {
+  const itemToggle = this.getAttribute('aria-expanded');
+  
+  for (i = 0; i < items.length; i++) {
+    items[i].setAttribute('aria-expanded', 'false');
+  }
+  
+  if (itemToggle == 'false') {
+    this.setAttribute('aria-expanded', 'true');
+  }
+}
+
+items.forEach(item => item.addEventListener('click', toggleAccordion));
+  </script>
