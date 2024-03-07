@@ -17,7 +17,7 @@
 
 
 
-    <div class="flex flex-wrap demobist-container demobist-gradient wave" style=" border-radius: 300px 0 300px 0 ;">
+    <div class="flex flex-wrap demobist-container demobist-gradient wave" style=" border-radius: 0 0 300px 300px;">
         <div class="w-3/5 mt-5">
             <div class="flex justify-between">
                 <div>
