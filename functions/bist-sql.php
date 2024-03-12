@@ -1,7 +1,7 @@
 <?php
 
 
-class borsaSql
+class bistSql
 {
 
     public function connectMysql()
@@ -25,6 +25,28 @@ class borsaSql
 
             // Genel hata mesajını kullanıcıya gösterme
             die("Bağlantı hatası oluştu. Lütfen daha sonra tekrar deneyiniz.");
+        }
+    }
+
+    function insert($table, $value_name, $data)
+    {
+        try {
+            $conn = $this->connectMysql();
+
+            // Prepared statement kullanımı
+            $placeholders = implode(',', array_fill(0, count($data), '?'));
+            $sql = "INSERT INTO $table ($value_name) VALUES ($placeholders)";
+            $stmt = $conn->prepare($sql);
+            // Prepared statement parametrelerini bağlama
+            $stmt->execute(array_values($data));
+
+            $lastInsertedId = $conn->lastInsertId();
+
+            return $lastInsertedId;
+        } catch (PDOException $e) {
+            return  $e->getMessage();
+        } finally {
+            $conn = null;
         }
     }
 }
