@@ -30,8 +30,7 @@
 
 <body>
 
-    <?php {
-    }
+    <?php
     if (isset($_POST['register'])) {
 
         @$mail = $_POST['mail'];
@@ -42,13 +41,14 @@
             require_once "connection.php";
 
             $table = "demobist_users";
-            $values = "user_mail,user_pass,user_register_date,status";
+            $values = "user_mail,user_pass,user_register_date,user_status";
             $data = [
                 "user_mail" =>  $bistCrypt->code_encrypt($mail),
                 "user_pass" => $bistCrypt->code_encrypt($pass),
                 "user_register_date" => date("Y-m-d"),
-                "status" => 0,
+                "user_status" => 0,
             ];
+
 
             $insert =  $bistSql->insert($table, $values, $data);
             if ($insert && is_numeric($insert)) {
@@ -66,14 +66,26 @@
                     "token_status" => 0,
                 ];
 
+                $table_wallet = "demobist_wallet";
+                $values_wallet = "user_id,total";
+                $data_wallet = [
+                    "user_id" => $insert,
+                    "total" => 500000
+                ];
+
 
                 $bistSql->insert($table_token, $values_token, $data_token);
+                $bistSql->insert($table_wallet, $values_wallet, $data_wallet);
+
+
 
                 $recipients = [$mail];
                 $link = "<a href='$activationLink'>linke Tıklayınız..</a>";
                 $content = "Merhaba,\n\nHesabınızı aktive etmek için  $link <br> Teşekkürler.";
                 $bistMailer->sendMail($recipients, $content, "Aktivitasyon Mesajı");
                 $mesaj = "Hesabınız başarıyla oluşturuldu. <br/> Hesabınızı aktifleştirmek için mailinize gelen linke tıklayınız...";
+            } else {
+                $mesaj = "Girdiğiniz mail adresi zaten mevcut.";
             }
         }
     }

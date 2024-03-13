@@ -36,8 +36,8 @@ $bist100_hisseleri = ["ASTOR", "BIMAS", "ENJSA", "KCHOL", "KOZAL", "MAVI", "SAHO
 // Tüm verileri veritabanına ekleme
 function insertAll($table, $value_names, $data)
 {
-    require 'functions/borsa-sql.php';
-    $borsa_sql  = new borsaSql();
+    require 'functions/bist-sql.php';
+    $borsa_sql  = new bistSql();
     try {
         $conn = $borsa_sql->connectMysql();
         $placeholders = implode(',', array_fill(0, count($data[0]), '?'));
@@ -57,8 +57,8 @@ function insertAll($table, $value_names, $data)
 // Verileri düzenleme ve güncelleme
 function updateData($table, $data)
 {
-    require 'functions/borsa-sql.php';
-    $borsa_sql  = new borsaSql();
+    require 'functions/bist-sql.php';
+    $borsa_sql  = new bistSql();
     try {
         $conn = $borsa_sql->connectMysql();
         foreach ($data as $hisse_adi => $veri) {

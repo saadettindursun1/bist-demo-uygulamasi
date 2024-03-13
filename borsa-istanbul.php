@@ -22,9 +22,9 @@
 
     <?php
 
-    require 'functions/borsa-sql.php';
+    require 'functions/bist-sql.php';
     require 'functions/bist100.php';
-    $borsa_sql  = new borsaSql();
+    $borsa_sql  = new bistSql();
     // PDO bağlantısı oluşturulması
     $conn = $borsa_sql->connectMysql();
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);

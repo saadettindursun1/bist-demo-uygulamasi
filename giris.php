@@ -1,3 +1,6 @@
+<?php
+ob_start();
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -29,24 +32,53 @@
 </head>
 
 <body>
+    <?php
+
+    if (isset($_POST['login'])) {
+        $result = false;
+        $message = "Giriş başarısız.";
+
+        @$mail = $_POST['mail'];
+        @$pass = $_POST['pass'];
+
+        require_once "connection.php";
+
+        $email_crypt = $bistCrypt->code_encrypt($mail);
+        $pass_crypt = $bistCrypt->code_encrypt($pass);
+
+        if ((isset($mail) && $mail != null) && isset($pass) && $pass != null) {
+
+
+            $sql_control = "SELECT * FROM demobist_users x JOIN demobist_wallet y ON x.user_id = y.user_id WHERE x.user_mail = :user_mail and x.user_pass = :user_pass";
+            $stmt_control = $bistSql->connectMysql()->prepare($sql_control);
+            $stmt_control->execute([':user_mail' => $email_crypt, ':user_pass' => $pass_crypt]);
+            $control_result = $stmt_control->fetch(PDO::FETCH_ASSOC);
+
+            if ($control_result) {
+                $result = true;
+                $message = "Giriş başarılı. Yönlendiriliyorsunuz....";
+            }
+        }
+    }
+    ?>
 
     <div class="limiter">
         <div class="container-login100" style="background-image: url('images/bg-01.jpg');">
             <div class="wrap-login100 p-l-55 p-r-55 p-t-65 p-b-54">
-                <form class="login100-form validate-form">
+                <form method="post" class="login100-form validate-form">
                     <span class="login100-form-title p-b-49">
                         Giriş Yap
                     </span>
 
-                    <div class="wrap-input100 validate-input m-b-23" data-validate="Username is reauired">
+                    <div class="wrap-input100 validate-input m-b-23" data-validate="E mail">
                         <span class="label-input100">E mail</span>
-                        <input class="input100" type="text" name="username" placeholder="E mail adresiniz..">
+                        <input class="input100" type="email" name="mail" placeholder="E mail adresiniz.." required>
                         <span class="focus-input100" data-symbol="&#xf206;"></span>
                     </div>
 
-                    <div class="wrap-input100 validate-input" data-validate="Password is required">
+                    <div class="wrap-input100 validate-input" data-validate="Parola">
                         <span class="label-input100">Parola</span>
-                        <input class="input100" type="password" name="pass" placeholder="Parolanız...">
+                        <input class="input100" type="password" name="pass" placeholder="Parolanız..." required>
                         <span class="focus-input100" data-symbol="&#xf190;"></span>
                     </div>
 
@@ -59,10 +91,30 @@
                     <div class="container-login100-form-btn">
                         <div class="wrap-login100-form-btn">
                             <div class="login100-form-bgbtn"></div>
-                            <button class="login100-form-btn">
+                            <button name="login" value="login" class="login100-form-btn">
                                 Giriş
                             </button>
                         </div>
+                    </div>
+                    <div class="flex-col p-t-10">
+                        <span style="text-decoration: underline;"> <?php
+                                                                    if (isset($result)) {
+                                                                        echo $message;
+                                                                        if ($result) {
+
+                                                                            session_unset();
+                                                                            @session_destroy();
+                                                                            // Yeni bir oturum başat ve oturum değişkenlerini ata
+                                                                            session_start();
+                                                                            $_SESSION["user_control"] = true;
+                                                                            $_SESSION["mail"] = $mail;
+                                                                            $_SESSION["amount"] = $control_result["total"];
+                                                                            session_regenerate_id();
+
+                                                                            header("Refresh:0;Url=anasayfa");
+                                                                        }
+                                                                    }
+                                                                    ?></span>
                     </div>
 
                     <div class="flex-col-c p-t-45">
