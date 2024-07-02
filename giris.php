@@ -1,5 +1,7 @@
 <?php
 ob_start();
+
+require "connection.php";
 ?>
 <!DOCTYPE html>
 <html lang="en">

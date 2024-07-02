@@ -2,6 +2,7 @@
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
+use PHPMailer\PHPMailer\SMTP;
 
 require 'vendor/phpmailer/phpmailer/src/Exception.php';
 require 'vendor/phpmailer/phpmailer/src/PHPMailer.php';
@@ -12,47 +13,44 @@ class bistMailer
 {
 
     function sendMail($recipients, $content, $content_subject)
-    {
-        $mail = new PHPMailer(true);
+{
+    $mail = new PHPMailer(true);
 
-        try {
-            //Server settings
-            $mail->CharSet = 'UTF-8';
-            $mail->SMTPKeepAlive = true;
+    try {
+        // Server settings
 
-            $mail->SMTPDebug = 0; // debug on - off
-            $mail->isSMTP();
-            $mail->Host = "mail.saadettindursun.com.tr"; // SMTP sunucusu örnek : mail.alanadi.com
-            $mail->SMTPAuth = true; // SMTP Doğrulama
-            $mail->Username = "saadettin@saadettindursun.com.tr"; // Mail kullanıcı adı
-            $mail->Password = "25912414660Sd."; // Mail şifresi
-            $mail->SMTPSecure = "ssl"; // Şifreleme
-            $mail->Port = "465"; // SMTP Port
-            $mail->SMTPOptions = array(
-                'ssl' => array(
-                    'verify_peer' => true,
-                    'verify_peer_name' => false,
-                    'allow_self_signed' => false
-                )
-            );
+        $mail->CharSet = 'UTF-8';
+        $mail->SMTPKeepAlive = true;
+        $mail->SMTPDebug = 0; // Debug mode (SMTP::DEBUG_OFF for no output)
+        $mail->isSMTP();
+        $mail->Host = $_ENV['SMTP_HOST']; // SMTP server from .env file
+        $mail->SMTPAuth = true; // Enable SMTP authentication
+        $mail->Username = $_ENV['SMTP_MAIL']; // SMTP username from .env file
+        $mail->Password = $_ENV['SMTP_PASSWORD']; // SMTP password from .env file
 
-            // Gönderen
-            $mail->setfrom("saadettin@saadettindursun.com.tr", 'Demobist - Yatırım Simülasyonu');
+        // SMTP security
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS; // Use PHPMailer::ENCRYPTION_SMTPS for SSL
+        $mail->Port = $_ENV['SMTP_PORT']; // Port from .env file
 
-            // Alıcıları ekle
-            foreach ($recipients as $recipient) {
-                $mail->addAddress($recipient);
-            }
+        // From address
+        $mail->setFrom($_ENV['SMTP_MAIL'], 'Demobist - Yatırım Simülasyonu');
 
-            // İçerik
-            $mail->isHTML(true);
-            $mail->Subject = $content_subject;
-            $mail->Body = $content;
-            $mail->send();
-            // Başarı mesajı
-            // echo 'Mesajınız Gönderildi.';
-        } catch (Exception $e) {
-            echo 'Mesajınız İletilemedi. Hata: ', $mail->ErrorInfo;
+        // Add recipients
+        foreach ($recipients as $recipient) {
+            $mail->addAddress($recipient);
         }
+
+        // Content
+        $mail->isHTML(true);
+        $mail->Subject = $content_subject;
+        $mail->Body = $content;
+
+
+        $mail->send();
+        // echo 'Mesajınız Gönderildi.';
+    } catch (Exception $e) {
+        echo 'Mesajınız İletilemedi. Hata: ', $mail->ErrorInfo;
     }
+}
+
 }

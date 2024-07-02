@@ -6,10 +6,10 @@ class bistSql
 
     public function connectMysql()
     {
-        $host = "localhost";
-        $dbname = "borsa";
-        $username = "root";
-        $password = "";
+        $host = $_ENV['DB_HOST'];
+        $dbname = $_ENV['DB_NAME'];
+        $username = $_ENV['DB_USER'];;
+        $password = $_ENV['DB_PASS'];;
 
 
         try {
