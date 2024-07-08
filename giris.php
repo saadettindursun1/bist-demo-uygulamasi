@@ -39,9 +39,9 @@ require "connection.php";
     if (isset($_POST['login'])) {
         $result = false;
         $message = "Giriş başarısız.";
-
-        @$mail = $_POST['mail'];
-        @$pass = $_POST['pass'];
+        // Post verilerini doğrudan kullanmak yerine doğrulama ve temizleme işlemi
+        $mail = isset($_POST['mail']) ? htmlspecialchars(stripslashes(trim($_POST['mail']))) : '';
+        $pass = isset($_POST['pass']) ? htmlspecialchars(stripslashes(trim($_POST['pass']))) : '';
 
         require_once "connection.php";
 
@@ -51,7 +51,7 @@ require "connection.php";
         if ((isset($mail) && $mail != null) && isset($pass) && $pass != null) {
 
 
-            $sql_control = "SELECT * FROM demobist_users x JOIN demobist_wallet y ON x.user_id = y.user_id WHERE x.user_mail = :user_mail and x.user_pass = :user_pass";
+            $sql_control = "SELECT * FROM demobist_users x JOIN demobist_wallet y ON x.user_id = y.user_id WHERE x.user_mail = :user_mail and x.user_pass = :user_pass and x.user_status=1";
             $stmt_control = $bistSql->connectMysql()->prepare($sql_control);
             $stmt_control->execute([':user_mail' => $email_crypt, ':user_pass' => $pass_crypt]);
             $control_result = $stmt_control->fetch(PDO::FETCH_ASSOC);
@@ -111,9 +111,10 @@ require "connection.php";
                                                                             $_SESSION["user_control"] = true;
                                                                             $_SESSION["mail"] = $mail;
                                                                             $_SESSION["amount"] = $control_result["total"];
+                                                                            $_SESSION["stock_wallet"] = $bistSql->update_stock_wallet($control_result["user_id"]);
                                                                             session_regenerate_id();
 
-                                                                            header("Refresh:0;Url=anasayfa");
+                                                                            header("Refresh:0;Url=panel/anasayfa");
                                                                         }
                                                                     }
                                                                     ?></span>

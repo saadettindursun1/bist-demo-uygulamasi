@@ -33,8 +33,8 @@
     <?php
     if (isset($_POST['register'])) {
 
-        @$mail = $_POST['mail'];
-        @$pass = $_POST['pass'];
+        $mail = isset($_POST['mail']) ? htmlspecialchars(stripslashes(trim($_POST['mail']))) : '';
+        $pass = isset($_POST['pass']) ? htmlspecialchars(stripslashes(trim($_POST['pass']))) : '';
 
         if ((isset($mail) && $mail != null) && isset($pass) && $pass != null) {
 
@@ -55,7 +55,7 @@
 
                 $token =  bin2hex(random_bytes(32));
 
-                $activationLink = "localhost/bist/activate?email=" . urlencode($mail) . "&token=" . urlencode($token);
+                $activationLink = $_ENV['SITE_URL']."/activate?email=" . urlencode($mail) . "&token=" . urlencode($token);
 
 
                 $table_token = "demobist_tokens";

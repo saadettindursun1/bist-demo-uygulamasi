@@ -49,4 +49,23 @@ class bistSql
             $conn = null;
         }
     }
+
+    function update_stock_wallet($user_id){
+            $sql_control = "SELECT * FROM demobist_users x JOIN demobist_wallet y ON x.user_id = y.user_id WHERE x.user_mail = :user_mail and x.user_pass = :user_pass and x.user_status=1";
+
+        $sql = "select * from demobist_stock_wallet X JOIN demobist_bist_data y ON x.stock_id=y.stock_id where x.user_id=:user_id";
+        $stmt = $this->connectMysql()->prepare($sql);
+        $stmt->execute([':user_id' => $user_id]);
+        return  $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    }
+
+    function listAll($query)
+    {
+        $conn = $this->connectMysql();
+        $sql = $query;
+
+        $data = $conn->query($sql);
+        return $data->fetchAll(PDO::FETCH_ASSOC);
+    }
 }

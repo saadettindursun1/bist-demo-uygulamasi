@@ -36,7 +36,7 @@ $bist100_hisseleri = ["ASTOR", "BIMAS", "ENJSA", "KCHOL", "KOZAL", "MAVI", "SAHO
 // Tüm verileri veritabanına ekleme
 function insertAll($table, $value_names, $data)
 {
-    require 'functions/bist-sql.php';
+    require 'connection.php';
     $borsa_sql  = new bistSql();
     try {
         $conn = $borsa_sql->connectMysql();
@@ -57,13 +57,13 @@ function insertAll($table, $value_names, $data)
 // Verileri düzenleme ve güncelleme
 function updateData($table, $data)
 {
-    require 'functions/bist-sql.php';
+    require 'connection.php';
     $borsa_sql  = new bistSql();
     try {
         $conn = $borsa_sql->connectMysql();
         foreach ($data as $hisse_adi => $veri) {
-            $stmt = $conn->prepare("UPDATE $table SET hisse_deger = :deger, hisse_yuzde = :yuzde WHERE hisse_adi = :hisse_adi");
-            $stmt->execute([':deger' => $veri['deger'], ':yuzde' => $veri['yuzde'], ':hisse_adi' => $hisse_adi]);
+            $stmt = $conn->prepare("UPDATE $table SET stock_value = :stock_value, stock_percentage = :stock_percentage WHERE stock_name = :stock_name");
+            $stmt->execute([':stock_value' => $veri['deger'], ':stock_percentage' => $veri['yuzde'], ':stock_name' => $hisse_adi]);
         }
         return "Veriler başarıyla güncellendi";
     } catch (PDOException $e) {
@@ -73,17 +73,17 @@ function updateData($table, $data)
     }
 }
 
-// BIST verilerini MySQL'e ekleme
-$table = "bist";
-$value = "hisse_adi,hisse_deger,hisse_yuzde";
-$veriler = array_intersect_key($bistData, array_flip($bist100_hisseleri));
-insertAll($table, $value, array_map(function ($hisse_adi, $veri) {
-    return [$hisse_adi, $veri['deger'], $veri['yuzde']];
-}, array_keys($veriler), $veriler));
+// // BIST verilerini MySQL'e ekleme
+// $table = "demobist_bist_data";
+// $value = "stock_name,stock_value,stock_percentage";
+// $veriler = array_intersect_key($bistData, array_flip($bist100_hisseleri));
+// insertAll($table, $value, array_map(function ($hisse_adi, $veri) {
+//     return [$hisse_adi, $veri['deger'], $veri['yuzde']];
+// }, array_keys($veriler), $veriler));
 
 
-echo "Veriler eklendi";
+// echo "Veriler eklendi";
 
 // Güncelleme işlemi
-//$update_result = updateData('bist', $bistData);
-//echo $update_result;
+$update_result = updateData('demobist_bist_data', $bistData);
+echo $update_result;
