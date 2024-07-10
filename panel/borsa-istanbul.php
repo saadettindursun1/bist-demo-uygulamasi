@@ -319,6 +319,9 @@ $_SESSION["buy_csrf_token"] = $buy_csrf_token;
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+<script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
     <!-- Github buttons -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>
     <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
@@ -332,6 +335,16 @@ $_SESSION["buy_csrf_token"] = $buy_csrf_token;
        var total = $('#stock_total_amount').text();
        var stock_id = $('#buy_stock_id').val();
 
+       var toast = Toastify({
+    text: 'İşlem başarıyla tamamlandı.',
+    duration: 3000,
+    close: true,
+    gravity: 'top',
+    position: 'right',
+    style: {
+        background: 'linear-gradient(to right, #00b09b, #96c93d)'
+    }
+});
 
         $.ajax({
                     url: 'buy-stock.php', // Verileri alacak PHP sayfasının adı
@@ -345,12 +358,30 @@ $_SESSION["buy_csrf_token"] = $buy_csrf_token;
 
                     },
                     success: function(response) {
-                        alert(response);
-                       // location.reload();
-                    },
-                    error: function(error) {
-                        console.error('Hata oluştu: ' + error);
-                    }
+        // Başarılı bildirimi
+        Toastify({
+            text: 'İşlem başarıyla tamamlandı.',
+            duration: 3000, // 3 saniye boyunca görünecek
+            close: true,
+            gravity: 'top', // Bildirimin üstten gelmesini sağlar
+            position: 'right', // Sağ üst köşede görünecek
+            backgroundColor: 'linear-gradient(to right, #00b09b, #96c93d)' // Arka plan rengi
+        }).showToast(function() {
+            // Toast kapanınca sayfayı yenile
+            location.reload();
+        });
+    },
+    error: function(xhr, status, error) {
+        // Hata bildirimi
+        Toastify({
+            text: 'İşlem sırasında bir hata oluştu.',
+            duration: 3000,
+            close: true,
+            gravity: 'top',
+            position: 'right',
+            backgroundColor: 'linear-gradient(to right, #ff5f6d, #ffc371)'
+        }).showToast();
+    }
                 });
      }
 
