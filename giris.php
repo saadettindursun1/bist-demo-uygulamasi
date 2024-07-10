@@ -109,6 +109,7 @@ require "connection.php";
                                                                             // Yeni bir oturum başat ve oturum değişkenlerini ata
                                                                             session_start();
                                                                             $_SESSION["user_control"] = true;
+                                                                            $_SESSION["user_id"] = $control_result["user_id"];
                                                                             $_SESSION["mail"] = $mail;
                                                                             $_SESSION["amount"] = $control_result["total"];
                                                                             $_SESSION["stock_wallet"] = $bistSql->update_stock_wallet($control_result["user_id"]);

@@ -51,13 +51,25 @@ class bistSql
     }
 
     function update_stock_wallet($user_id){
-            $sql_control = "SELECT * FROM demobist_users x JOIN demobist_wallet y ON x.user_id = y.user_id WHERE x.user_mail = :user_mail and x.user_pass = :user_pass and x.user_status=1";
-
         $sql = "select * from demobist_stock_wallet X JOIN demobist_bist_data y ON x.stock_id=y.stock_id where x.user_id=:user_id";
         $stmt = $this->connectMysql()->prepare($sql);
         $stmt->execute([':user_id' => $user_id]);
         return  $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+    }
+    function update_stock($user_id,$stock_id,$qty,$amount){
+        try {
+            $conn = $this->connectMysql();
+            $sql_update = "UPDATE demobist_stock_wallet SET stock_quantity = stock_quantity + :qty, total_amount = total_amount + :amount WHERE user_id = :user_id AND stock_id = :stock_id";
+            $stmt_update = $conn->prepare($sql_update);
+            $stmt_update->execute([':qty'=>$qty, ':amount' => $amount, ':user_id' => $user_id , ':stock_id' => $stock_id]);
+            return true;
+    
+        } catch (PDOException $e) {
+            // Hata durumunda hata mesajını logla veya işle
+            error_log('update error: ' . $e->getMessage());
+            return false;
+        }
     }
 
     function listAll($query)
@@ -67,5 +79,48 @@ class bistSql
 
         $data = $conn->query($sql);
         return $data->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    function decreaseAmount($id,$amount){
+        try {
+        $conn = $this->connectMysql();
+        $sql_update = "UPDATE demobist_wallet SET total = total - :amount WHERE user_id = :user_id";
+        $stmt_update = $conn->prepare($sql_update);
+        $stmt_update->execute([':amount' => $amount, ':user_id' => $id]);
+        return true;
+
+    } catch (PDOException $e) {
+        // Hata durumunda hata mesajını logla veya işle
+        error_log('decreaseAmount error: ' . $e->getMessage());
+        return false;
+    }
+
+    }
+
+    function haveStock($user_id,$stock_id){
+        try {
+            // PDO bağlantısını al
+            $conn = $this->connectMysql();
+    
+            // SQL sorgusu
+            $sql = "SELECT COUNT(*) as count FROM demobist_stock_wallet WHERE user_id = :user_id AND stock_id = :stock_id";
+    
+            // SQL sorgusunu hazırla ve çalıştır
+            $stmt = $conn->prepare($sql);
+            $stmt->execute([':user_id' => $user_id, ':stock_id' => $stock_id]);
+    
+            // Sonucu al
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+            // COUNT(*) sonucunu al
+            $count = (int) $result['count'];
+    
+            // Sonucu değerlendir ve true veya false döndür
+            return $count > 0 ? true : false;
+        } catch (PDOException $e) {
+            // Hata durumunda hata mesajını logla veya işle
+            error_log('checkUserStock error: ' . $e->getMessage());
+            return false;
+        }
     }
 }

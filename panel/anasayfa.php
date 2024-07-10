@@ -258,10 +258,12 @@ $bist_stocks = $_SESSION["stock_wallet"];
 
                                             </td>
                                             <td class="align-middle text-center text-sm">
-                                                <span class="text-xs font-weight-bold"> <?php echo $bist_stock["stock_value"] ?> </span>
+                                                <span class="text-xs font-weight-bold"> <?php
+                                                           $stock_value = floatval($bist_stock["stock_value"]);
+                                                           echo round( $stock_value,2) ?> </span>
                                             </td>
                                             <td class="align-middle text-center text-sm">
-                                                <span class="text-xs font-weight-bold"> <?php echo ($bist_stock["total_amount"] / $bist_stock["stock_quantity"]) ?> </span>
+                                                <span class="text-xs font-weight-bold"> <?php echo round( ($bist_stock["total_amount"] / $bist_stock["stock_quantity"]),2) ?> </span>
                                             </td>
                                             <td class="align-middle">
                                                 <div class="progress-wrapper w-75 mx-auto">
@@ -274,9 +276,8 @@ $bist_stocks = $_SESSION["stock_wallet"];
                                                            $stock_quantity = intval($bist_stock["stock_quantity"]);
                                                            $old_amount = ($total_amount / $stock_quantity);
                                                            
-                                                           $stock_value = floatval($bist_stock["stock_value"]);
                                                            $per_win = (($stock_value - $old_amount) / $old_amount) * 100;
-                                                           echo $per_win;
+                                                           echo round( $per_win,2);
                                                             ?>
                                                             </span>
                                                         </div>
@@ -518,6 +519,14 @@ $bist_stocks = $_SESSION["stock_wallet"];
     <script src="./assets/js/plugins/perfect-scrollbar.min.js"></script>
     <script src="./assets/js/plugins/smooth-scrollbar.min.js"></script>
     <script src="./assets/js/plugins/chartjs.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            $("#anasayfa").addClass("active bg-gradient-primary");
+        });
+    </script>
+
     <script>
     var ctx = document.getElementById("chart-bars").getContext("2d");
 
@@ -774,6 +783,8 @@ $bist_stocks = $_SESSION["stock_wallet"];
         Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
     }
     </script>
+
+  
     <!-- Github buttons -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>
     <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
