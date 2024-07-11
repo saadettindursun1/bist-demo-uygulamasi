@@ -9,7 +9,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $errors = [];
 
-        $user_id = $_SESSION["user_id"];
         if (isset($_POST['qty']) && filter_var($_POST['qty'], FILTER_VALIDATE_INT)) {
             $qty = (int)$_POST['qty'];
         } else {
@@ -26,6 +25,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             $errors[] = 'Invalid total';
         }
+        if (isset($_POST['process'])) {
+            $process = $_POST['process'];
+        } else {
+            $errors[] = 'Invalid process';
+        }
+
 
 
         // Hataları işle
@@ -39,47 +44,73 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             require "connection.php";
 
-            $user_amount = $_SESSION["amount"];
+            if ($process == "buy") {
+                $user_amount = $_SESSION["amount"];
 
 
-            //eğer kullanıcının bakiyesi yeterli ise
-            if ($user_amount >= $total) {
+                //eğer kullanıcının bakiyesi yeterli ise
+                if ($user_amount >= $total) {
 
-                //bakiyeden düşme
-                $responseDecrease = $bistSql->decreaseAmount($user_id, $total);
+                    //bakiyeden düşme
+                    $responseDecrease = $bistSql->decreaseAmount($user_id, $total);
 
-                if ($responseDecrease == true) {
-                    //eğer bu hisse cüzdanda mevcut ise güncelleme yapılacak
-                    if ($bistSql->haveStock($user_id, $stock_id)) {
-                        $bistSql->update_stock($user_id, $stock_id,$qty,$total);
-                    } 
-                    
+                    if ($responseDecrease == true) {
+                        //eğer bu hisse cüzdanda mevcut ise güncelleme yapılacak
+                        if ($bistSql->haveStock($user_id, $stock_id)) {
+                            $bistSql->update_stock($user_id, $stock_id, $qty, $total);
+                        }
 
-                    //hisse cüzdanda yoksa ekleme yapılacak
-                    else {
-                       
-                    $table = "demobist_stock_wallet";
-                    $values = "user_id,stock_id,stock_quantity,total_amount";
-                    $data = [
-                        "user_id" => $user_id,
-                        "stock_id" => $stock_id,
-                        "stock_quantity" => $qty,
-                        "total_amount" => $total,
-                    ];
-                    $bistSql->insert($table, $values, $data);
-            
+
+                        //hisse cüzdanda yoksa ekleme yapılacak
+                        else {
+
+                            $table = "demobist_stock_wallet";
+                            $values = "user_id,stock_id,stock_quantity,total_amount";
+                            $data = [
+                                "user_id" => $user_id,
+                                "stock_id" => $stock_id,
+                                "stock_quantity" => $qty,
+                                "total_amount" => $total,
+                            ];
+                            $bistSql->insert($table, $values, $data);
+                        }
+                        $_SESSION["stock_wallet"] = $bistSql->update_stock_wallet($user_id);
+                        $_SESSION["amount"] = $user_amount - $total;
+                        echo "Hisse Alımı Başarılı";
+                    } else {
+                        echo $responseDecrease;
                     }
-                    $_SESSION["stock_wallet"] = $bistSql->update_stock_wallet($user_id);
-                    $_SESSION["amount"] = $user_amount - $total;
-                    echo "Hisse Alımı Başarılı";
-
-
                 } else {
-                    echo $responseDecrease;
+                    echo 'Yetersiz bakiye..';
                 }
-            } else {
-                echo 'Yetersiz bakiye..';
             }
+            if($process=="sell"){
+                $stock_count = $bistSql->countStock($user_id, $stock_id);
+
+
+                //eğer kullanıcının satmak istediği adet miktarı  elinde mecvut ise 
+                if ($stock_count >= $qty) {
+
+                    //bakiye ekleme
+                    $responseDecrease = $bistSql->decreaseAmount($user_id, -$total);
+
+                    if ($responseDecrease == true) {
+
+                            //stok düşülüyor..
+                            $bistSql->update_stock($user_id, $stock_id, -$qty, -$total);
+
+                       
+                        $_SESSION["stock_wallet"] = $bistSql->update_stock_wallet($user_id);
+                        $_SESSION["amount"]  += $total;
+                        echo "Hisse Satımı Başarılı";
+                    } else {
+                        echo $responseDecrease;
+                    }
+                } else {
+                    echo 'Satmak istediğiniz miktar mevcut miktardan fazla olamaz!..';
+                }
+            }
+
         }
     } else {
         echo 'Error: Invalid CSRF token.';

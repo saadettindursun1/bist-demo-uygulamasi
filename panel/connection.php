@@ -15,3 +15,4 @@ require_once "../functions/bist-name-values.php";
 $bistSql = new bistSql();
 $bistCrypt = new bistCrypt();
 $bistMailer = new bistMailer();
+$user_id = $_SESSION["user_id"];

@@ -123,4 +123,25 @@ class bistSql
             return false;
         }
     }
+
+    function countStock($user_id,$stock_id){
+        $sql = "SELECT stock_quantity FROM demobist_stock_wallet WHERE user_id = :user_id AND stock_id = :stock_id";
+        $stmt = $this->connectMysql()->prepare($sql);
+        
+        try {
+            $stmt->execute([':user_id' => $user_id, ':stock_id' => $stock_id]);
+            $data = $stmt->fetch(PDO::FETCH_ASSOC);
+            
+            if ($data === false) {
+                // Kayıt bulunamadıysa
+                return 0;  // Veya uygun bir varsayılan değer
+            }
+        
+            return $data["stock_quantity"];
+        } catch (PDOException $e) {
+            // Hata meydana geldiğinde
+            error_log("Database error: " . $e->getMessage());
+            return null;  // Veya uygun bir hata değeri
+        }
+    }
 }
