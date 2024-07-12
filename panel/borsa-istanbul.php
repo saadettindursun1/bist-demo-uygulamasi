@@ -261,7 +261,7 @@ $_SESSION["buy_csrf_token"] = $buy_csrf_token;
                                                     <div class="progress-wrapper w-75 mx-auto">
                                                         <div class="progress-info">
                                                             <div class="progress-percentage">
-                                                                <span class="text-xs text-success font-weight-bold">%
+                                                                <span class="text-xs text-secondary font-weight-bold">%
                                                                     <?php
                                                                     $total_amount = floatval($bist_stock["total_amount"]);
                                                                     $stock_quantity = intval($bist_stock["stock_quantity"]);
@@ -269,7 +269,7 @@ $_SESSION["buy_csrf_token"] = $buy_csrf_token;
 
                                                                     $stock_value = floatval($bist_stock["stock_value"]);
                                                                     $per_win = (($stock_value - $old_amount) / $old_amount) * 100;
-                                                                    echo $per_win;
+                                                                    echo round( $per_win,2);
                                                                     ?>
                                                                 </span>
                                                             </div>

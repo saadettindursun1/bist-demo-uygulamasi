@@ -44,6 +44,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             require "connection.php";
 
+            $data = [
+                "user_id" => $user_id,
+                "stock_id" => $stock_id,
+                "stock_quantity" => $qty,
+                "total_amount" => $total,
+            ];
+
+
             if ($process == "buy") {
                 $user_amount = $_SESSION["amount"];
 
@@ -66,13 +74,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                             $table = "demobist_stock_wallet";
                             $values = "user_id,stock_id,stock_quantity,total_amount";
-                            $data = [
-                                "user_id" => $user_id,
-                                "stock_id" => $stock_id,
-                                "stock_quantity" => $qty,
-                                "total_amount" => $total,
-                            ];
+                          
+                            $table_transaction = "demobist_transaction_list";
+                            $values_transaction = "user_id,stock_id,stock_quantity,total_amount,status";
+                            $data_transaction = $data;
+                            $data_transaction["status"] = 1;
+
                             $bistSql->insert($table, $values, $data);
+                            $bistSql->insert($table_transaction, $values_transaction, $data_transaction);
                         }
                         $_SESSION["stock_wallet"] = $bistSql->update_stock_wallet($user_id);
                         $_SESSION["amount"] = $user_amount - $total;
@@ -84,7 +93,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     echo 'Yetersiz bakiye..';
                 }
             }
-            if($process=="sell"){
+            if ($process == "sell") {
                 $stock_count = $bistSql->countStock($user_id, $stock_id);
 
 
@@ -96,10 +105,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     if ($responseDecrease == true) {
 
-                            //stok düşülüyor..
+                        //stok düşülüyor..
+
+                        $table_transaction = "demobist_transaction_list";
+                        $values_transaction = "user_id,stock_id,stock_quantity,total_amount,status";
+                        $data_transaction = $data;
+                        $data_transaction["status"] = 0;
+                        $bistSql->insert($table_transaction, $values_transaction, $data_transaction);
+
+
+                        if ($stock_count == $qty) {
+                            $bistSql->deleteStock($user_id, $stock_id);
+
+                        } else {
                             $bistSql->update_stock($user_id, $stock_id, -$qty, -$total);
 
-                       
+                        }
+
                         $_SESSION["stock_wallet"] = $bistSql->update_stock_wallet($user_id);
                         $_SESSION["amount"]  += $total;
                         echo "Hisse Satımı Başarılı";
@@ -110,7 +132,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     echo 'Satmak istediğiniz miktar mevcut miktardan fazla olamaz!..';
                 }
             }
-
         }
     } else {
         echo 'Error: Invalid CSRF token.';

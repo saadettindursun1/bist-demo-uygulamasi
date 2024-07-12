@@ -144,4 +144,25 @@ class bistSql
             return null;  // Veya uygun bir hata değeri
         }
     }
+    function deleteStock($user_id,$stock_id){
+        $conn = $this->connectMysql();
+
+        try {
+            // Silme sorgusu
+            $sql = "DELETE FROM demobist_stock_wallet WHERE user_id = :user_id AND stock_id = :stock_id";
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+            $stmt->bindParam(':stock_id', $stock_id, PDO::PARAM_INT);
+            $stmt->execute();
+            
+            if ($stmt->rowCount() > 0) {
+                echo "Kayıt silindi.";
+            } else {
+                echo "Silinecek kayıt bulunamadı.";
+            }
+        } catch (PDOException $e) {
+            echo "Silme hatası: " . $e->getMessage();
+        }
+
+    }
 }
