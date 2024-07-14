@@ -36,6 +36,10 @@ session_start();
     border-radius: 0.375rem;
     padding-left: 10px;
 }
+.success-bg{
+    background-color:#e2ece9;
+}
+
 </style>
 <?php
 require "connection.php";
@@ -140,8 +144,8 @@ $_SESSION["buy_csrf_token"] = $buy_csrf_token;
 
             <!-- The Modal -->
             <div class="modal" id="myModal">
-                <div class="modal-dialog">
-                    <div class="modal-content">
+                <div class="modal-dialog ">
+                    <div class="modal-content success-bg">
 
                         <!-- Modal Header -->
                         <div class="modal-header">
@@ -214,7 +218,7 @@ $_SESSION["buy_csrf_token"] = $buy_csrf_token;
 
                         <!-- Modal Footer -->
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Kapat</button>
                         </div>
 
                     </div>
@@ -454,11 +458,14 @@ $_SESSION["buy_csrf_token"] = $buy_csrf_token;
         $("#buyBtn").click(function() {
             $("#buyForm").removeClass("hidden");
             $("#sellForm").addClass("hidden");
+            $(".modal-content").css("background-color","#e2ece9")
         });
 
         $("#sellBtn").click(function() {
             $("#sellForm").removeClass("hidden");
             $("#buyForm").addClass("hidden");
+            $(".modal-content").css("background-color","#FFE1E1")
+
         });
 
 
