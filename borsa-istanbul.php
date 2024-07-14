@@ -22,14 +22,13 @@
 
     <?php
 
-    require 'functions/bist-sql.php';
-    require 'functions/bist100.php';
+    require 'connection.php';
     $borsa_sql  = new bistSql();
     // PDO bağlantısı oluşturulması
     $conn = $borsa_sql->connectMysql();
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    $sql = "select * from bist";
+    $sql = "select * from demobist_bist_data";
 
     // Sorgunun hazırlanması
     $stmt = $conn->prepare($sql);
@@ -117,20 +116,20 @@
                 <tbody class="text-center" id="data">
                     <?php foreach ($lots as $lot) : ?>
                         <tr>
-                            <td class="border  text-lg px-4 py-2"><?php echo $lot["hisse_adi"] ?></td>
-                            <td class="border  text-lg px-4 py-2"><?php echo $bist_sirket_isimleri[$lot["hisse_adi"]] ?>
+                            <td class="border  text-lg px-4 py-2"><?php echo $lot["stock_name"] ?></td>
+                            <td class="border  text-lg px-4 py-2"><?php echo $bist_name_values[$lot["stock_name"]] ?>
                             </td>
-                            <td class="border  text-lg px-4 py-2"><?php echo $lot["hisse_deger"] ?></td>
+                            <td class="border  text-lg px-4 py-2"><?php echo $lot["stock_value"] ?></td>
                             <td class="border text-lg font-bold  px-4 py-2 
                         <?php
-                        if ($lot["hisse_yuzde"] > 0) {
+                        if ($lot["stock_percentage"] > 0) {
                             echo "text-green-600";
                         }
-                        if ($lot["hisse_yuzde"] < 0) {
+                        if ($lot["stock_percentage"] < 0) {
                             echo "text-red-600";
                         }
                         ?>
-                        "><?php echo $lot["hisse_yuzde"] ?></td>
+                        "><?php echo $lot["stock_percentage"] ?></td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>
