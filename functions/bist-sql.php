@@ -165,4 +165,12 @@ class bistSql
         }
 
     }
+
+    function user_transactions($user_id,$limit){
+
+   $sql = "select * from demobist_transaction_list X JOIN demobist_bist_data y ON x.stock_id=y.stock_id where x.user_id=:user_id  ORDER BY x.transaction_id desc  LIMIT $limit";
+        $stmt = $this->connectMysql()->prepare($sql);
+        $stmt->execute([':user_id' => $user_id]);
+        return  $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }

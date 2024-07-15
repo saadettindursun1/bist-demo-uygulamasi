@@ -75,17 +75,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             $table = "demobist_stock_wallet";
                             $values = "user_id,stock_id,stock_quantity,total_amount";
                           
-                            $table_transaction = "demobist_transaction_list";
-                            $values_transaction = "user_id,stock_id,stock_quantity,total_amount,status";
-                            $data_transaction = $data;
-                            $data_transaction["status"] = 1;
+                           
 
                             $bistSql->insert($table, $values, $data);
-                            $bistSql->insert($table_transaction, $values_transaction, $data_transaction);
                         }
                         $_SESSION["stock_wallet"] = $bistSql->update_stock_wallet($user_id);
                         $_SESSION["amount"] = $user_amount - $total;
                         echo "Hisse Alımı Başarılı";
+
+                      
+
                     } else {
                         echo $responseDecrease;
                     }
@@ -107,11 +106,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                         //stok düşülüyor..
 
-                        $table_transaction = "demobist_transaction_list";
-                        $values_transaction = "user_id,stock_id,stock_quantity,total_amount,status";
-                        $data_transaction = $data;
-                        $data_transaction["status"] = 0;
-                        $bistSql->insert($table_transaction, $values_transaction, $data_transaction);
+                        
 
 
                         if ($stock_count == $qty) {
@@ -132,6 +127,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     echo 'Satmak istediğiniz miktar mevcut miktardan fazla olamaz!..';
                 }
             }
+
+            $table_transaction = "demobist_transaction_list";
+            $values_transaction = "user_id,stock_id,stock_quantity,total_amount,status";
+            $data_transaction = $data;
+            $data_transaction["status"] = $process=="buy" ? 1 : 0;
+            $bistSql->insert($table_transaction, $values_transaction, $data_transaction);
+
+
+
         }
     } else {
         echo 'Error: Invalid CSRF token.';

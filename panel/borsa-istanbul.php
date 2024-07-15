@@ -25,6 +25,10 @@ session_start();
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
     <!-- CSS Files -->
     <link id="pagestyle" href="./assets/css/material-dashboard.css?v=3.0.0" rel="stylesheet" />
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdn.datatables.net/2.0.8/js/dataTables.min.js"></script>
 </head>
 <style>
 .hidden {
@@ -38,6 +42,10 @@ session_start();
 }
 .success-bg{
     background-color:#e2ece9;
+}
+
+div.dt-container .dt-search input{
+    width:50%;
 }
 
 </style>
@@ -75,12 +83,8 @@ $_SESSION["buy_csrf_token"] = $buy_csrf_token;
                         <div class="card-body px-0 pb-2">
                          
 
-                            <div class="table-responsive p-0">
-                            <div class="mb-4">
-                                <input type="text" id="search" class="border rounded py-2 px-3 mx-3 col-10"
-                                    placeholder="Arama yap...">
-                            </div>
-                                <table class="table align-items-center mb-0">
+                            <div class="table-responsive p-5">
+                                <table class="table align-items-center mb-0" id="demobist_data">
                                     <thead>
                                         <tr>
                                             <th
@@ -288,7 +292,7 @@ $_SESSION["buy_csrf_token"] = $buy_csrf_token;
                                             </td>
                                             <td class="align-middle text-center text-sm">
                                                 <span class="text-xs font-weight-bold">
-                                                    <?php echo ($bist_stock["total_amount"] / $bist_stock["stock_quantity"]) ?>
+                                                    <?php echo round(($bist_stock["total_amount"] / $bist_stock["stock_quantity"]),2) ?>
                                                 </span>
                                             </td>
                                             <td class="align-middle">
@@ -391,6 +395,9 @@ $_SESSION["buy_csrf_token"] = $buy_csrf_token;
 
             },
             success: function(response) {
+                $('#stock_qty').val(0);
+                $('#sell_stock_qty').val(0);
+
                 var userAmountText = $('#user_amount').text().trim();
 
                 // Değişkenlerin sayıya dönüştürülmesi
@@ -450,6 +457,18 @@ $_SESSION["buy_csrf_token"] = $buy_csrf_token;
 
     }
     $(document).ready(function() {
+
+        var table = new DataTable('#demobist_data', {
+    language: {
+        url: 'https://cdn.datatables.net/plug-ins/2.0.8/i18n/tr.json',
+    },
+    responsive: true,
+    
+
+
+
+});
+
 
 
         $("#borsa-istanbul").addClass("active bg-gradient-primary");
@@ -534,32 +553,7 @@ $_SESSION["buy_csrf_token"] = $buy_csrf_token;
         // Stock value input alanında her değişiklik olduğunda hesaplama yap
     });
     </script>
-        <script>
-        document.getElementById("search").addEventListener("input", function() {
-            var searchText = this.value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,
-                ""); // Türkçe karakterleri dönüştürmek
-            var rows = document.querySelectorAll("#data tr");
 
-            rows.forEach(function(row) {
-                var cells = row.querySelectorAll("td");
-                var found = false;
-
-                cells.forEach(function(cell) {
-                    var cellText = cell.textContent.toLowerCase().normalize("NFD").replace(
-                        /[\u0300-\u036f]/g, ""); // Türkçe karakterleri dönüştürmek
-                    if (cellText.includes(searchText)) {
-                        found = true;
-                    }
-                });
-
-                if (found) {
-                    row.style.display = "";
-                } else {
-                    row.style.display = "none";
-                }
-            });
-        });
-    </script>
 
 </body>
 

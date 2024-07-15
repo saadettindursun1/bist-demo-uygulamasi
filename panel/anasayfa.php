@@ -31,6 +31,9 @@ session_start();
 require "connection.php";
 
 $bist_stocks = $_SESSION["stock_wallet"];
+
+$transactions = $bistSql->user_transactions($user_id,4);
+
 ?>
 <body class="g-sidenav-show  bg-gray-200">
 
@@ -203,10 +206,10 @@ $bist_stocks = $_SESSION["stock_wallet"];
                                         </a>
                                         <ul class="dropdown-menu px-2 py-3 ms-sm-n4 ms-n5"
                                             aria-labelledby="dropdownTable">
-                                            <li><a class="dropdown-item border-radius-md" href="javascript:;">Hisse
+                                            <li><a class="dropdown-item border-radius-md" href="borsa-istanbul">Hisse
                                                     senedi al/sat</a>
                                             </li>
-
+                                        
                                         </ul>
                                     </div>
                                 </div>
@@ -303,80 +306,60 @@ $bist_stocks = $_SESSION["stock_wallet"];
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-4 col-md-6">
-                    <div class="card h-100">
-                        <div class="card-header pb-0">
-                            <h6>Demobist | Gündemdeki Konular</h6>
-                            <a href="">
-                                <p class="text-sm">
-                                    <i class="fa fa-arrow-up text-success" aria-hidden="true"></i>
-                                    Tüm konuları incele
-                                </p>
-                            </a>
+                <div class="col-lg-4">
+            <div class="card h-100 mb-4">
+                <div class="card-header pb-0 px-3">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6 class="mb-0">Son İşlemlerim</h6>
                         </div>
-                        <div class="card-body p-3">
-                            <div class="timeline timeline-one-side">
-                                <div class="timeline-block mb-3">
-                                    <span class="timeline-step">
-                                        <i class="material-icons text-success text-gradient">notifications</i>
-                                    </span>
-                                    <div class="timeline-content">
-                                        <h6 class="text-dark text-sm font-weight-bold mb-0">$2400, Design changes</h6>
-                                        <p class="text-secondary font-weight-bold text-xs mt-1 mb-0">22 DEC 7:20 PM</p>
-                                    </div>
-                                </div>
-                                <div class="timeline-block mb-3">
-                                    <span class="timeline-step">
-                                        <i class="material-icons text-danger text-gradient">code</i>
-                                    </span>
-                                    <div class="timeline-content">
-                                        <h6 class="text-dark text-sm font-weight-bold mb-0">New order #1832412</h6>
-                                        <p class="text-secondary font-weight-bold text-xs mt-1 mb-0">21 DEC 11 PM</p>
-                                    </div>
-                                </div>
-                                <div class="timeline-block mb-3">
-                                    <span class="timeline-step">
-                                        <i class="material-icons text-info text-gradient">shopping_cart</i>
-                                    </span>
-                                    <div class="timeline-content">
-                                        <h6 class="text-dark text-sm font-weight-bold mb-0">Server payments for April
-                                        </h6>
-                                        <p class="text-secondary font-weight-bold text-xs mt-1 mb-0">21 DEC 9:34 PM</p>
-                                    </div>
-                                </div>
-                                <div class="timeline-block mb-3">
-                                    <span class="timeline-step">
-                                        <i class="material-icons text-warning text-gradient">credit_card</i>
-                                    </span>
-                                    <div class="timeline-content">
-                                        <h6 class="text-dark text-sm font-weight-bold mb-0">New card added for order
-                                            #4395133</h6>
-                                        <p class="text-secondary font-weight-bold text-xs mt-1 mb-0">20 DEC 2:20 AM</p>
-                                    </div>
-                                </div>
-                                <div class="timeline-block mb-3">
-                                    <span class="timeline-step">
-                                        <i class="material-icons text-primary text-gradient">key</i>
-                                    </span>
-                                    <div class="timeline-content">
-                                        <h6 class="text-dark text-sm font-weight-bold mb-0">Unlock packages for
-                                            development</h6>
-                                        <p class="text-secondary font-weight-bold text-xs mt-1 mb-0">18 DEC 4:54 AM</p>
-                                    </div>
-                                </div>
-                                <div class="timeline-block">
-                                    <span class="timeline-step">
-                                        <i class="material-icons text-dark text-gradient">payments</i>
-                                    </span>
-                                    <div class="timeline-content">
-                                        <h6 class="text-dark text-sm font-weight-bold mb-0">New order #9583120</h6>
-                                        <p class="text-secondary font-weight-bold text-xs mt-1 mb-0">17 DEC</p>
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="col-md-6 d-flex justify-content-start justify-content-md-end align-items-center">
+                            <i class="material-icons me-2 text-lg">filter_list</i>
+                            <small>Son 3 işlem listeleniyor..</small>
                         </div>
                     </div>
                 </div>
+                <div class="card-body pt-4 p-3">
+                    <h6 class="text-uppercase text-body text-xs font-weight-bolder mb-3">İşlemler</h6>
+                    <ul class="list-group">
+                        <?php foreach($transactions as $t): ?>
+                        <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
+                            <div class="d-flex col-5 align-items-center">
+                                <button
+                                    class="btn btn-icon-only btn-rounded mb-0 me-3 p-3 btn-sm d-flex align-items-center justify-content-center <?php echo $t["status"]?"btn-outline-success":"btn-outline-danger" ?>">
+                                    <i
+                                        class="material-icons text-lg"><?php echo $t["status"]?"expand_less":"expand_more" ?></i>
+                                </button>
+                                <div class="d-flex flex-column">
+                                    <h6 class="mb-1 text-dark text-sm">
+                                        <?php echo $t["stock_name"] ?></h6>
+                                    <span class="text-xs"><?php echo $t["created_at"] ?></span>
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <p class="text-sm mt-3">
+                                    <?php 
+
+                                    $price = round((floatval($t["total_amount"]) / intval( $t["stock_quantity"])),2);
+                                    echo $t["stock_quantity"]." adet";;
+                                     ?>
+                            
+                            </p>
+                            </div>
+                          
+                            <div
+                                class="d-flex col-2  align-items-center text-gradient text-sm font-weight-bold <?php echo $t["status"]?"text-success":"text-danger" ?>">
+                                <?php echo $t["total_amount"]." ₺" ?>
+                            </div>
+                        </li>
+                        <hr>
+                        <?php endforeach; ?>
+
+                    </ul>
+
+                </div>
+            </div>
+        </div>
             </div>
             <footer class="footer py-4  ">
                 <div class="container-fluid">
