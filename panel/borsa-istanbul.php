@@ -395,8 +395,8 @@ $_SESSION["buy_csrf_token"] = $buy_csrf_token;
 
             },
             success: function(response) {
-                $('#stock_qty').val(0);
-                $('#sell_stock_qty').val(0);
+                $('#stock_qty').val(null);
+                $('#sell_stock_qty').val(null);
 
                 var userAmountText = $('#user_amount').text().trim();
 

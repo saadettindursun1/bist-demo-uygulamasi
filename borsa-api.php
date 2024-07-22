@@ -28,7 +28,8 @@ foreach (array_slice($data, 1, -1) as $veri) {
 }
 
 
-$bist100_hisseleri = ["ASTOR", "BIMAS", "ENJSA", "KCHOL", "KOZAL", "MAVI", "SAHOL", "SISE", "SOKM", "THYAO", "TOASO", "TUPRS", "YKBNK"];
+// $bist100_hisseleri = ["ASTOR", "BIMAS", "ENJSA", "KCHOL", "KOZAL", "MAVI", "SAHOL", "SISE", "SOKM", "THYAO", "TOASO", "TUPRS", "YKBNK","AGROT","AKENR","ASELS","EREGL"];
+$bist100_hisseleri = ["PGSUS"];
 
 
 

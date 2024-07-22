@@ -243,6 +243,7 @@ $transactions = $bistSql->user_transactions($user_id,4);
                                     <tbody>
 
                                         <?php
+                                        $stock_total = 0;
                                        foreach($bist_stocks as $bist_stock):
                                         ?>
                                         <tr>
@@ -294,17 +295,26 @@ $transactions = $bistSql->user_transactions($user_id,4);
                                             </td>
                                             <td class="align-middle text-center text-sm">
                                                 <span class="text-xs font-weight-bold"> 
-                                                <?php echo $stock_quantity* floatval($bist_stock["stock_value"]); ?>    
+                                                <?php 
+                                                $amount = $stock_quantity* floatval($bist_stock["stock_value"]);
+                                                $stock_total += $amount;
+                                                echo $amount;  ?>    
                                                 ₺ </span>
                                             </td>
                                         </tr>
                                         <?php endforeach ?>
-
+                                         
                                     </tbody>
                                 </table>
+                               
                             </div>
                         </div>
+                        <hr>
+                        <div class="flex d-flex justify-content-end">
+                               <p class="mx-4  p-3 h6">Toplam Değer:   <?php echo $stock_total; ?>  ₺ </p>
+                                </div>
                     </div>
+                    
                 </div>
                 <div class="col-lg-4">
             <div class="card h-100 mb-4">
